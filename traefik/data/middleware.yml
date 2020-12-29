@@ -1,0 +1,23 @@
+#http is redirected directly to https
+http:
+  middlewares:
+    https-redirect:
+      redirectScheme:
+        scheme: https
+#Header
+   default-headers:
+      headers:
+        CustomFrameOptionsValue: "SAMEORIGIN"
+        sslRedirect: true
+        browserXssFilter: true
+        contentTypeNosniff: true
+        forceSTSHeader: true
+        stsSeconds: 315360000
+        stsIncludeSubdomains: true
+     stsPreload: true
+
+#TLS version 1.2 is used.
+tls:
+  options:
+    myTLSOptions:
+       minVersion: VersionTLS12

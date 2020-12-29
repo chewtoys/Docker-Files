@@ -1,0 +1,36 @@
+#Check Version
+    global:
+      checkNewVersion: true
+    api:
+      dashboard: true
+      debug: true
+    log:
+### Default Level is ERROR. All Log-Levels: DEBUG, PANIC, FATAL, ERROR, WARN, and INFO
+      level: INFO
+      filePath: "/traefik.log"
+
+#Port 80 and 443
+    entryPoints:
+      http:
+        address: ":80"
+      https:
+        address: ":443"
+
+#All Docker-Containers add in the Network "web" Add this Line in compose-File „traefik.enable=true“
+	providers:
+      docker:
+        endpoint: "unix:///var/run/docker.sock"
+        network: web
+        exposedByDefault: false
+      file:
+        filename: /middleware.yml
+
+#Settings für "ACME" the certificates are stored in acme.json and linked to the specified email 
+#TLS-Challange --> TLS: Is a protocol for an encrypted connection 
+    certificatesResolvers:
+      le:
+        acme:
+          email: your@e-mail.adresse
+          storage: acme.json
+          tlsChallenge: {}
+    
