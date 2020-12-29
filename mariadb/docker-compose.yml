@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+ maria105master:
+  image: mariadb:10.5
+  restart: unless-stopped
+  container_name: mariadb
+  networks:
+    - intern
+  ports:
+   - "127.0.0.1:3306:3306"
+  environment:
+   MYSQL_ROOT_PASSWORD: ''
+  volumes:
+   - /srv/docker/data/mariadb105:/var/lib/mysql
+   - /srv/docker/files/mariadb105/conf:/etc/mysql/mariadb.conf.d
+
+networks:
+  intern:
+    external: true
+~
+~

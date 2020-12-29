@@ -1,0 +1,41 @@
+version: '3'
+
+services:
+ bookstack:
+  image: linuxserver/bookstack:latest
+  restart: "always"
+  container_name: bookstack
+  networks:
+    - intern
+    - web
+  ports:
+   - 80
+  environment:
+    DB_HOST: maria105master:3306
+    DB_DATABASE: bookstack
+    DB_USERNAME: user
+    DB_PASSWORD: ''
+    MYSQL_INITDB_SKIP_TZINFO: 1
+    APP_URL: https://wiki.juliuslab.de
+  labels:
+   - "traefik.enable=true"
+   - "traefik.http.routers.bookstack.entrypoints=http"
+   - "traefik.http.routers.bookstack.rule=Host(`DOMAIN`)"
+   - "traefik.http.routers.bookstack.middlewares=https-redirect@file"
+   - "traefik.http.routers.bookstack-sec.entrypoints=https"
+   - "traefik.http.routers.bookstack-sec.middlewares=default-headers@file"
+   - "traefik.http.routers.bookstack-sec.rule=Host(`DOMAIN`)"
+   - "traefik.http.routers.bookstack-sec.tls=true"
+   - "traefik.http.routers.bookstack-sec.tls.options=myTLSOptions@file"
+   - "traefik.http.routers.bookstack-sec.tls.certresolver=le"
+  volumes:
+  - /srv/docker/data/bookstack:/config
+  external_links:
+   - maria105master
+
+
+networks:
+  intern:
+    external: true
+  web:
+    external: true

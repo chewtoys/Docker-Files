@@ -1,0 +1,45 @@
+version: '3'
+
+services:
+ gitea:
+  image: gitea/gitea:latest
+  restart: "always"
+  container_name: gitea
+  networks:
+    - intern
+    - web
+  ports:
+    - "4000:4000"
+    - "222:22"
+  environment:
+    DB_TYPE: mysql
+    DB_HOST: maria105master:3306
+    DB_NAME: gitea
+    DB_USER: user
+    DB_PASSWD: 'Password'
+    USER_UID: 1000
+    USER_GID: 1000
+  labels:
+   - "traefik.enable=true"
+   - "traefik.http.routers.gitea.entrypoints=http"
+   - "traefik.http.routers.gitea.rule=Host(`DOMAIN`)"
+   - "traefik.http.routers.gitea.middlewares=https-redirect@file"
+   - "traefik.http.routers.gitea-sec.entrypoints=https"
+   - "traefik.http.routers.gitea-sec.middlewares=default-headers@file"
+   - "traefik.http.routers.gitea-sec.rule=Host(`DOMAIN`)"
+   - "traefik.http.routers.gitea-sec.tls=true"
+   - "traefik.http.routers.gitea-sec.tls.options=myTLSOptions@file"
+   - "traefik.http.routers.gitea-sec.tls.certresolver=le"
+   - "traefik.http.services.gitea.loadbalancer.server.port=3000"
+  volumes:
+  - /srv/docker/data/gitea:/data
+  - /etc/timezone:/etc/timezone:ro
+  - /etc/localtime:/etc/localtime:ro
+  external_links:
+   - maria105master
+
+networks:
+  intern:
+    external: true
+  web:
+    external: true
