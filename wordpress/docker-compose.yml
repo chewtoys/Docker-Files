@@ -1,0 +1,40 @@
+version: '3'
+
+services:
+
+ wordpress:
+  image: wordpress:latest
+  container_name: wordpress
+  restart: always
+  networks:
+   - intern
+   - web
+  ports:
+   - 80
+  environment:
+   WORDPRESS_DB_NAME: wp-name
+   WORDPRESS_DB_USER: wp-user
+   WORDPRESS_DB_PASSWORD: ''
+   WORDPRESS_TABLE_PREFIX: 'tprefx_'
+   WORDPRESS_DB_HOST: maria105master:3306
+  labels:
+   - "traefik.enable=true"
+   - "traefik.http.routers.wordpress.entrypoints=http"
+   - "traefik.http.routers.wordpress.rule=Host(`DOMAIN`)"
+   - "traefik.http.routers.wordpress.middlewares=https-redirect@file"
+   - "traefik.http.routers.wordpress-sec.entrypoints=https"
+   - "traefik.http.routers.wordpress-sec.rule=Host(`DOMAIN`)"
+   - "traefik.http.routers.wordpress-sec.middlewares=default-headers@file"
+   - "traefik.http.routers.wordpress-sec.tls=true"
+   - "traefik.http.routers.wordpress-sec.tls.options=myTLSOptions@file"
+   - "traefik.http.routers.wordpress-sec.tls.certresolver=le"
+  volumes:
+   - /srv/docker/data/wordpress:/var/www/html
+  external_links:
+   - maria105master
+
+networks:
+  intern:
+    external: true
+  web:
+
