@@ -1,0 +1,41 @@
+version: '3'
+
+services:
+  mumble:
+    image: phlak/mumble:latest
+    container_name: mumble-server
+    volumes:
+      - ./config.ini:/etc/mumble/config.ini
+      - ./murmur.sqlite:/etc/mumble/murmur.sqlite
+    networks:
+      - intern
+    ports:
+      - 64738:64738/tcp
+      - 64738:64738/udp
+    restart: always
+
+  websockify:
+    image: efrecon/websockify
+    container_name: mumble-websocket
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.mumble.entrypoints=http"
+      - "traefik.http.routers.mumble.rule=Host(`DOMAIN`)"
+      - "traefik.http.routers.mumble.middlewares=https-redirect@file"
+      - "traefik.http.routers.mumble-sec.entrypoints=https"
+      - "traefik.http.routers.mumble-sec.middlewares=default-headers@file"
+      - "traefik.http.routers.mumble-sec.rule=Host(`DOMAIN`)"
+      - "traefik.http.routers.mumble-sec.tls=true"
+      - "traefik.http.routers.mumble-sec.tls.options=myTLSOptions@file"
+      - "traefik.http.routers.mumble-sec.tls.certresolver=le"
+    networks:
+      - intern
+      - web
+    restart: always
+    command: --ssl-target 80 mumble:64738
+
+networks:
+  intern:
+    external: true
+  web:
+    external: true
