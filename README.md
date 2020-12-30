@@ -3,10 +3,9 @@ Docker-Files behind Traefik-Proxy(https://traefik.io)
 ![Photo](Docs/wallabag.png)
 
 Software i used in Docker-Container:
-- Nextcloud --> find in my repository 
+- Nextcloud 
 ![Photo](Docs/nextcloud.png)
-- Wordpress --> find in my repository 
-
+- Wordpress 
 - Bitwarden 
 ![Photo](Docs/bitwarden.png)
 - Gitea
@@ -16,3 +15,6 @@ Software i used in Docker-Container:
 - Jitsi-Meet
 - Heimdall 
 - Bookstack
+- Mumble 
+- Traefik-Proxy
+
