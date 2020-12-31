@@ -14,7 +14,7 @@ services:
       - SYMFONY__ENV__DATABASE_NAME=wallabag
       - SYMFONY__ENV__DATABASE_USER= user 
       - SYMFONY__ENV__DATABASE_PASSWORD= ''
-      - SYMFONY__ENV__DOMAIN_NAME=https://links.juliuslab.de
+      - SYMFONY__ENV__DOMAIN_NAME=https://DOMAIN
       - SYMFONY__ENV__FOSUSER_REGISTRATION=false
       - SYMFONY__ENV__FOSUSER_CONFIRMATION=false
     labels:
