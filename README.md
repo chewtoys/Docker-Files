@@ -3,6 +3,7 @@ Docker-Files behind Traefik-Proxy(https://traefik.io)
 
 Software i used in Docker-Container:
 - Nextcloud 
+- MariaDB
 - Wordpress 
 - Bitwarden 
 - Gitea
